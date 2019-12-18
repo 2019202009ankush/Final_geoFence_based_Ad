@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package com.adonmo.proto;
+
+option java_outer_classname = "DeviceStateProto";
+
+import "google/protobuf/timestamp.proto";
+
+/* device_state.proto
+* Proto definition for models pertaining to device state
+*/
+
+message Device {
+GeoPosition geoPosition = 1;
+string campaignCode = 2;
+ScreenStatus screenStatus = 3;
+uint64 brightness = 4;
+string networkType = 5;
+google.protobuf.Timestamp creationTime = 6;
+string appVersionName = 7;
+uint64 appVersionCode = 8;
+}
+
+message GeoPosition {
+double latitude = 1;
+double longitude = 2;
+string zone = 3;
+float accuracy = 4;
+float azimuth = 5;
+uint64 time = 6;
+float speed = 7;
+uint64 satelliteNumber = 8;
+float altitude = 9;
+}
+
+enum ScreenStatus {
+OFF = 0;
+ON = 1;
+}
