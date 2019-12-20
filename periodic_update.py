@@ -11,6 +11,6 @@ def runPeriodic():
 	for x in AlluniqueGeoFence:
 		dic=redis_key_value.getValue(x)
 		# print(dic)
-		sample.setWebHook(x,dic['circle_x'],dic['circle_y'],dic['radius'])
+		sample.setWebHook(x,dic['x_coordinate_of_geofence_center'],dic['y_coordinate_of_geofence_center'],dic['radius'])
 	threading.Timer(WAIT_SECONDS, runPeriodic).start()
 runPeriodic()

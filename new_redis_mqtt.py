@@ -4,13 +4,13 @@ import paho.mqtt.client as mqtt
 import redis_key_value
 import base64
 import asyncio
-
+from loading_environment import WSS_ADD,MQTT_HOST,MQTT_PORT
 def on_connect(client, userdata, flags, rc):
   print("Connected with result code "+str(rc))
   client.subscribe("test")
 
 async def sendMessage(message):
-    uri = "wss://bifrost.adonmo.com:443/ws?access_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyIn0.TtxZ8q90SPr0a47CnynP4bya_8XDkbq3kgRUOqdYvkg&client_type=superuser"
+    uri = WSS_ADD
     import websockets
     async with websockets.connect(uri) as websocket:
         await websocket.send(message)
@@ -62,7 +62,8 @@ def on_message(client, userdata, msg):
             print(device_id, campaign_id,detect,x_coordinate,y_coordinate)
 
 client = mqtt.Client()
-client.connect("127.0.0.1",1883,60)
+print(int(MQTT_PORT))
+client.connect(MQTT_HOST,int(MQTT_PORT),60)
 client.on_connect = on_connect
 client.on_message = on_message
 

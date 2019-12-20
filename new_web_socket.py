@@ -5,6 +5,7 @@ import base64
 import sample
 import redis_key_value
 import time
+from loading_environment import WSS_ADD
 
 def on_message(ws, message):
     temp_list=message.split('\n')
@@ -26,13 +27,16 @@ def on_message(ws, message):
 
 def on_error(ws, error):
     print(error)
+
 def on_close(ws):
     print("### closed ###")
+
 def on_open(ws):
     print("connection establised")
+    
 if __name__ == "__main__":
     websocket.enableTrace(True)
-    ws = websocket.WebSocketApp("wss://bifrost.adonmo.com:443/ws?access_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyIn0.TtxZ8q90SPr0a47CnynP4bya_8XDkbq3kgRUOqdYvkg&client_type=superuser",
+    ws = websocket.WebSocketApp(WSS_ADD,
                               on_message = on_message,
                               on_error = on_error,
                               on_close = on_close)
