@@ -9,7 +9,7 @@ def on_connect(client, userdata, flags, rc):
   print("Connected with result code "+str(rc))
   client.subscribe("test")
 
-async def sendMessage(message):
+async def send_message(message):
     uri = WSS_ADD
     import websockets
     async with websockets.connect(uri) as websocket:
@@ -27,12 +27,12 @@ def on_message(client, userdata, msg):
     coordinate=jmsg["object"]["coordinates"]
     x_coordinate=coordinate[0]
     y_coordinate=coordinate[1]
-    
+
     if detect=='inside':
         if device_id not in unique_devices_that_are_inside:
             unique_devices_that_are_inside.add(device_id)
-            print(' [+] {} unique_devices_that_are_inside so far: {}'.format(len(unique_devices_that_are_inside), unique_devices_that_are_inside))
-            print(device_id, geofence_id,detect,x_coordinate,y_coordinate,campaignCode)
+            print(' [+] {} unique_devices_that_are_inside so far: {}'.format(len(unique_devices_that_are_inside), unique_devices_that_are_inside),flush=True)
+            print(device_id, geofence_id,detect,x_coordinate,y_coordinate,campaignCode,flush=True)
             # if campaignCode == 711:
             #     print("--- Sending ---", flush=True)
             #     try:
@@ -44,22 +44,23 @@ def on_message(client, userdata, msg):
             #         print(device_id,campaignCode,json.dumps(payload_dict, indent=2))
             #         print(message1)
             #         print()
-            #         asyncio.get_event_loop().run_until_complete(sendMessage(message1))
+            #         asyncio.get_event_loop().run_until_complete(send_message(message1))
             #         print("sent")
             #     except Exception as e:
             #         traceback.print_exc()
-            from periodic_update import AlluniqueGeoFence
-            print ("hi",AlluniqueGeoFence)
-            if geofence_id in AlluniqueGeoFence:
-                dic=redis_key_value.getValue(geofence_id)
+            from periodic_update import all_unique_geo_fence
+            print ("hi",all_unique_geo_fence)
+            if geofence_id in all_unique_geo_fence:
+                dic=redis_key_value.get_value(geofence_id)
                 if campaignCode!=dic["campaign_id"]:
-                    print ('HiiiiiiiiiiisendMessage;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;')               
+                    print ('Hiiiiiiiiiiisend_message;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;')
 
     else:
         if device_id in unique_devices_that_are_inside:
             unique_devices_that_are_inside.remove(device_id)
             print(' [-] {} unique_devices_that_are_inside so far: {}'.format(len(unique_devices_that_are_inside), unique_devices_that_are_inside))
             print(device_id, campaign_id,detect,x_coordinate,y_coordinate)
+
 
 client = mqtt.Client()
 print(int(MQTT_PORT))

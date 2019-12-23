@@ -20,7 +20,7 @@ def on_message(ws, message):
 
                 device.ParseFromString(payload)
                 if float(device.geoPosition.latitude) > 0.1:
-                    print(device_id,device.campaignCode,device.geoPosition.latitude, device.geoPosition.longitude)
+                    print(device_id,device.campaignCode,device.geoPosition.latitude, device.geoPosition.longitude,flush=True)
                     sample.setfleet(device_id,device.geoPosition.latitude,device.geoPosition.longitude,device.campaignCode)
         except NameError:
             print("Not parseable")
@@ -32,8 +32,8 @@ def on_close(ws):
     print("### closed ###")
 
 def on_open(ws):
-    print("connection establised")
-    
+    print("connection establised",flush=True)
+
 if __name__ == "__main__":
     websocket.enableTrace(True)
     ws = websocket.WebSocketApp(WSS_ADD,
